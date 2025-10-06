@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from "react";
 import {
   IconChevronDown,
   IconChevronLeft,
@@ -9,26 +9,23 @@ import {
   IconDotsVertical,
   IconTrendingUp,
   IconTrendingDown,
-} from "@tabler/icons-react"
+} from "@tabler/icons-react";
 import {
   type ColumnDef,
   type ColumnFiltersState,
   flexRender,
   getCoreRowModel,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   type SortingState,
   useReactTable,
   type VisibilityState,
-} from "@tanstack/react-table"
+} from "@tanstack/react-table";
 
-import { useIsMobile } from "@/hooks/use-mobile"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -36,17 +33,15 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -54,34 +49,30 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
+} from "@/components/ui/table";
 
 interface BusinessData {
-  id: number
-  rank: number
-  businessName: string
-  sectionType: string
-  status: string
-  weeklyGainLoss: string
-  rating: string
+  id: number;
+  rank: number;
+  businessName: string;
+  sectionType: string;
+  status: string;
+  weeklyGainLoss: string;
+  rating: string;
 }
 
 interface DataTableProps {
-  data: BusinessData[]
+  data: BusinessData[];
 }
 
 export function BusinessLeaderboardTable({ data }: DataTableProps) {
-  const isMobile = useIsMobile()
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = React.useState({});
 
   const columns: ColumnDef<BusinessData>[] = [
     {
@@ -107,64 +98,60 @@ export function BusinessLeaderboardTable({ data }: DataTableProps) {
       accessorKey: "rank",
       header: "Rank",
       cell: ({ row }) => {
-        const rank = row.getValue("rank") as number
+        const rank = row.getValue("rank") as number;
         return (
           <div className="flex items-center">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold">
               {rank}
             </div>
           </div>
-        )
+        );
       },
     },
     {
       accessorKey: "businessName",
       header: "Business Name",
       cell: ({ row }) => {
-        const name = row.getValue("businessName") as string
-        return (
-          <div className="font-medium">
-            {name}
-          </div>
-        )
+        const name = row.getValue("businessName") as string;
+        return <div className="font-medium">{name}</div>;
       },
     },
     {
       accessorKey: "sectionType",
       header: "Section Type",
       cell: ({ row }) => {
-        const type = row.getValue("sectionType") as string
-        return (
-          <Badge variant="outline">
-            {type}
-          </Badge>
-        )
+        const type = row.getValue("sectionType") as string;
+        return <Badge variant="outline">{type}</Badge>;
       },
     },
     {
       accessorKey: "status",
       header: "Status",
       cell: ({ row }) => {
-        const status = row.getValue("status") as string
+        const status = row.getValue("status") as string;
         return (
-          <Badge 
+          <Badge
             variant={status === "Open" ? "default" : "secondary"}
             className="flex items-center gap-1"
           >
             <IconCircleCheckFilled className="h-3 w-3" />
             {status}
           </Badge>
-        )
+        );
       },
     },
     {
       accessorKey: "weeklyGainLoss",
       header: "Weekly Gain/Loss",
       cell: ({ row }) => {
-        const gainLoss = row.getValue("weeklyGainLoss") as string
-        const isPositive = gainLoss.startsWith("+")
+        const gainLoss = row.getValue("weeklyGainLoss") as string;
+        const isPositive = gainLoss.startsWith("+");
         return (
-          <div className={`flex items-center gap-1 ${isPositive ? "text-green-600" : "text-red-600"}`}>
+          <div
+            className={`flex items-center gap-1 ${
+              isPositive ? "text-green-600" : "text-red-600"
+            }`}
+          >
             {isPositive ? (
               <IconTrendingUp className="h-4 w-4" />
             ) : (
@@ -172,27 +159,27 @@ export function BusinessLeaderboardTable({ data }: DataTableProps) {
             )}
             <span className="font-medium">{gainLoss}</span>
           </div>
-        )
+        );
       },
     },
     {
       accessorKey: "rating",
       header: "Rating",
       cell: ({ row }) => {
-        const rating = row.getValue("rating") as string
+        const rating = row.getValue("rating") as string;
         return (
           <div className="flex items-center gap-1">
             <span className="font-medium">{rating}</span>
             <span className="text-muted-foreground">/5.0</span>
           </div>
-        )
+        );
       },
     },
     {
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => {
-        const business = row.original
+        const business = row.original;
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -203,7 +190,9 @@ export function BusinessLeaderboardTable({ data }: DataTableProps) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(business.businessName)}
+                onClick={() =>
+                  navigator.clipboard.writeText(business.businessName)
+                }
               >
                 Copy business name
               </DropdownMenuItem>
@@ -212,10 +201,10 @@ export function BusinessLeaderboardTable({ data }: DataTableProps) {
               <DropdownMenuItem>Edit business</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        )
+        );
       },
     },
-  ]
+  ];
 
   const table = useReactTable({
     data,
@@ -234,7 +223,7 @@ export function BusinessLeaderboardTable({ data }: DataTableProps) {
       columnVisibility,
       rowSelection,
     },
-  })
+  });
 
   return (
     <div className="w-full space-y-4">
@@ -242,16 +231,25 @@ export function BusinessLeaderboardTable({ data }: DataTableProps) {
         <div className="flex flex-1 items-center space-x-2">
           <Input
             placeholder="Filter business names..."
-            value={(table.getColumn("businessName")?.getFilterValue() as string) ?? ""}
+            value={
+              (table.getColumn("businessName")?.getFilterValue() as string) ??
+              ""
+            }
             onChange={(event) =>
-              table.getColumn("businessName")?.setFilterValue(event.target.value)
+              table
+                .getColumn("businessName")
+                ?.setFilterValue(event.target.value)
             }
             className="h-8 w-[150px] lg:w-[250px]"
           />
           <Select
-            value={(table.getColumn("sectionType")?.getFilterValue() as string) ?? ""}
+            value={
+              (table.getColumn("sectionType")?.getFilterValue() as string) ?? ""
+            }
             onValueChange={(value) =>
-              table.getColumn("sectionType")?.setFilterValue(value === "all" ? "" : value)
+              table
+                .getColumn("sectionType")
+                ?.setFilterValue(value === "all" ? "" : value)
             }
           >
             <SelectTrigger className="h-8 w-[150px]">
@@ -268,7 +266,11 @@ export function BusinessLeaderboardTable({ data }: DataTableProps) {
         <div className="flex items-center space-x-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="ml-auto hidden h-8 lg:flex">
+              <Button
+                variant="outline"
+                size="sm"
+                className="ml-auto hidden h-8 lg:flex"
+              >
                 <IconChevronDown className="mr-2 h-4 w-4" />
                 View
               </Button>
@@ -277,7 +279,9 @@ export function BusinessLeaderboardTable({ data }: DataTableProps) {
               <DropdownMenuCheckboxItem
                 className="capitalize"
                 checked={table.getIsAllColumnsVisible()}
-                onCheckedChange={(value) => table.toggleAllColumnsVisible(!!value)}
+                onCheckedChange={(value) =>
+                  table.toggleAllColumnsVisible(!!value)
+                }
               >
                 Toggle all
               </DropdownMenuCheckboxItem>
@@ -291,11 +295,13 @@ export function BusinessLeaderboardTable({ data }: DataTableProps) {
                       key={column.id}
                       className="capitalize"
                       checked={column.getIsVisible()}
-                      onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
                     >
                       {column.id}
                     </DropdownMenuCheckboxItem>
-                  )
+                  );
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
@@ -316,7 +322,7 @@ export function BusinessLeaderboardTable({ data }: DataTableProps) {
                             header.getContext()
                           )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -362,11 +368,13 @@ export function BusinessLeaderboardTable({ data }: DataTableProps) {
             <Select
               value={`${table.getState().pagination.pageSize}`}
               onValueChange={(value) => {
-                table.setPageSize(Number(value))
+                table.setPageSize(Number(value));
               }}
             >
               <SelectTrigger className="h-8 w-[70px]">
-                <SelectValue placeholder={table.getState().pagination.pageSize} />
+                <SelectValue
+                  placeholder={table.getState().pagination.pageSize}
+                />
               </SelectTrigger>
               <SelectContent side="top">
                 {[10, 20, 30, 40, 50].map((pageSize) => (
@@ -422,5 +430,5 @@ export function BusinessLeaderboardTable({ data }: DataTableProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }

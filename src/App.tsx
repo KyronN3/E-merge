@@ -1,29 +1,46 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
 import LoginPage from "./Auth/LoginPage.tsx";
-import CityGovernmentDashboard from "./app/dashboard/CityGovernmentDashboard.tsx";
 import BusinessDashboard from "./app/dashboard/BusinessDashboard.tsx";
+import CityGovernmentDashboard from "./app/dashboard/CityGovernmentDashboard.tsx";
 import SignupPage from "./Auth/SignupPage.tsx";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { useUserStore } from "./store/User-store.ts";
 
-function App() {
+const App = () => {
+  const userStore = useUserStore();
+
+  const routes: object[] = [];
+
+  switch (userStore.getRole()) {
+    case "business_owner":
+      routes.splice(0, routes.length);
+      routes.push({ path: "/", element: <BusinessDashboard /> });
+      break;
+    case "public":
+      routes.splice(0, routes.length);
+      break;
+    case "city":
+      routes.splice(0, routes.length);
+      routes.push({ path: "/", element: <CityGovernmentDashboard /> });
+      break;
+    case "admin":
+      routes.splice(0, routes.length);
+      break;
+    default:
+      routes.splice(0, routes.length);
+      routes.push(
+        { path: "/", element: <LoginPage /> },
+        { path: "/auth/signup", element: <SignupPage /> }
+      );
+      break;
+  }
+
+  const router = createBrowserRouter(routes);
+
   return (
-      <Router>
-        <Routes>
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route
-            path="/city-government-dashboard"
-            element={<CityGovernmentDashboard />}
-          />
-          <Route path="/business-dashboard" element={<BusinessDashboard />} />
-        </Routes>
-      </Router>
+    <>
+      <RouterProvider router={router} />
+    </>
   );
-}
+};
 
 export default App;
