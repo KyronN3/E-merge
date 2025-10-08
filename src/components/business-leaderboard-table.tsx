@@ -5,7 +5,6 @@ import {
   IconChevronRight,
   IconChevronsLeft,
   IconChevronsRight,
-  IconCircleCheckFilled,
   IconDotsVertical,
   IconTrendingUp,
   IconTrendingDown,
@@ -50,19 +49,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import type { BusinessColumn } from "@/type/Business-type";
 
-interface BusinessData {
-  id: number;
-  rank: number;
-  businessName: string;
-  sectionType: string;
-  status: string;
-  weeklyGainLoss: string;
-  rating: string;
-}
+// interface BusinessData {
+//   id: number;
+//   rank: number;
+//   business_name: string;
+//   sectionType: string;
+//   status: string;
+//   weeklyGainLoss: string;
+//   rating: string;
+// }
 
 interface DataTableProps {
-  data: BusinessData[];
+  data: BusinessColumn[] | null;
 }
 
 export function BusinessLeaderboardTable({ data }: DataTableProps) {
@@ -74,7 +74,7 @@ export function BusinessLeaderboardTable({ data }: DataTableProps) {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
-  const columns: ColumnDef<BusinessData>[] = [
+  const columns: ColumnDef<BusinessColumn>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -109,42 +109,50 @@ export function BusinessLeaderboardTable({ data }: DataTableProps) {
       },
     },
     {
-      accessorKey: "businessName",
+      accessorKey: "business_name",
       header: "Business Name",
       cell: ({ row }) => {
-        const name = row.getValue("businessName") as string;
+        const name = row.getValue("business_name") as string;
         return <div className="font-medium">{name}</div>;
       },
     },
     {
-      accessorKey: "sectionType",
-      header: "Section Type",
+      accessorKey: "city",
+      header: "City",
       cell: ({ row }) => {
-        const type = row.getValue("sectionType") as string;
-        return <Badge variant="outline">{type}</Badge>;
+        const city = row.getValue("city") as string;
+        return <Badge variant="outline">{city}</Badge>;
       },
     },
     {
-      accessorKey: "status",
-      header: "Status",
+      accessorKey: "address",
+      header: "Address",
       cell: ({ row }) => {
-        const status = row.getValue("status") as string;
-        return (
-          <Badge
-            variant={status === "Open" ? "default" : "secondary"}
-            className="flex items-center gap-1"
-          >
-            <IconCircleCheckFilled className="h-3 w-3" />
-            {status}
-          </Badge>
-        );
+        const address = row.getValue("address") as string;
+        return <Badge variant="outline">{address}</Badge>;
       },
     },
     {
-      accessorKey: "weeklyGainLoss",
-      header: "Weekly Gain/Loss",
+      accessorKey: "date",
+      header: "Date",
       cell: ({ row }) => {
-        const gainLoss = row.getValue("weeklyGainLoss") as string;
+        const date = row.getValue("date") as string;
+        return <Badge variant="outline">{date}</Badge>;
+      },
+    },
+    {
+      accessorKey: "visitor_count",
+      header: "visitor Count",
+      cell: ({ row }) => {
+        const visitor_count = row.getValue("visitor_count") as string;
+        return <Badge variant="outline">{visitor_count}</Badge>;
+      },
+    },
+    {
+      accessorKey: "visitor_gained",
+      header: "Visitor Gained",
+      cell: ({ row }) => {
+        const gainLoss = row.getValue("visitor_gained") as string;
         const isPositive = gainLoss.startsWith("+");
         return (
           <div
@@ -191,7 +199,7 @@ export function BusinessLeaderboardTable({ data }: DataTableProps) {
             <DropdownMenuContent align="end">
               <DropdownMenuItem
                 onClick={() =>
-                  navigator.clipboard.writeText(business.businessName)
+                  navigator.clipboard.writeText(business.business_name)
                 }
               >
                 Copy business name
@@ -207,7 +215,7 @@ export function BusinessLeaderboardTable({ data }: DataTableProps) {
   ];
 
   const table = useReactTable({
-    data,
+    data: data ?? [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -232,23 +240,21 @@ export function BusinessLeaderboardTable({ data }: DataTableProps) {
           <Input
             placeholder="Filter business names..."
             value={
-              (table.getColumn("businessName")?.getFilterValue() as string) ??
+              (table.getColumn("business_name")?.getFilterValue() as string) ??
               ""
             }
             onChange={(event) =>
               table
-                .getColumn("businessName")
+                .getColumn("business_name")
                 ?.setFilterValue(event.target.value)
             }
             className="h-8 w-[150px] lg:w-[250px]"
           />
           <Select
-            value={
-              (table.getColumn("sectionType")?.getFilterValue() as string) ?? ""
-            }
+            value={(table.getColumn("city")?.getFilterValue() as string) ?? ""}
             onValueChange={(value) =>
               table
-                .getColumn("sectionType")
+                .getColumn("city")
                 ?.setFilterValue(value === "all" ? "" : value)
             }
           >

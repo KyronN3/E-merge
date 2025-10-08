@@ -12,10 +12,9 @@ export const axiosAPI: APIAxiosInstance = axios.create({
 
 axiosAPI.interceptors.request.use(
     (config: APIInternalAxiosRequestConfig): APIInternalAxiosRequestConfig => {
-        const token: string | undefined | null = localStorage.getItem("token");
-
+        const token: string | undefined | null = localStorage.getItem("user");
         if (token !== undefined && token !== null && config.headers) {
-            config.headers['Authorization'] = `Bearer ${JSON.parse(token) as string}`;
+            config.headers['Authorization'] = `Bearer ${JSON.parse(token).token as string}`;
         }
         return config
     },

@@ -1,5 +1,5 @@
-import { type AuthService, type LoginAction } from "@/type/Auth-type";
-import { type LoginErrorResponse, type LoginResponse } from "@/type/Axios-type";
+import type { LogoutResponse, AuthService, LoginAction, SignupAction, SignupResponse } from "@/type/Auth-type";
+import type { LoginResponse, LoginErrorResponse, LogoutAction } from "@/type/Auth-type";
 import { useUserStore } from "@/store/User-store";
 import { axiosAPI } from "@/axios";
 
@@ -14,10 +14,35 @@ export const useAuthService = (): AuthService => {
             return { success: true };
         } catch (error: unknown) {
             const err = error as LoginErrorResponse;
-            console.error("LoginService error:", err.message || error);
+            console.error("Login error:", err.message || error);
             return { success: err.success, message: err.message || "An unknown error occurred" };
         }
     }
 
-    return { Login };
+    const Signup: SignupAction = async (data) => {
+        try {
+            await axiosAPI.post<SignupResponse>("/auth/register", data);
+            return { success: true }
+        } catch (error: unknown) {
+            const err = error as { message: string }
+            console.error("Signup error:", err.message || error);
+            return { success: false, message: err.message }
+        }
+    }
+
+    const Logout: LogoutAction = async () => {
+        try {
+            const response = await axiosAPI.post<LogoutResponse>("/auth/logout")
+            if (response.data.success) {
+                localStorage.clear();
+            }
+            return { success: response.data.success, message: response.data.message }
+        } catch (error: unknown) {
+            const err = error as { success: boolean, message: string }
+            console.error("LogoutService error:", error)
+            return { success: err.success, message: err.message }
+        }
+    }
+
+    return { Login, Logout, Signup };
 }

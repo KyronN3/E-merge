@@ -1,17 +1,27 @@
-import { AppSidebar } from "@/components/app-sidebar"
-import { ChartAreaInteractive } from "@/components/chart-area-interactive"
-import { BusinessLeaderboardTable } from "@/components/business-leaderboard-table"
+import { AppSidebar } from "@/components/app-sidebar";
+import { ChartAreaInteractive } from "@/components/chart-area-interactive";
+import { BusinessLeaderboardTable } from "@/components/business-leaderboard-table";
 
-import { SiteHeader } from "@/components/site-header"
-import { CarouselDemo } from "@/components/carousel"
-import {
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar"
+import { SiteHeader } from "@/components/site-header";
+import { CarouselDemo } from "@/components/carousel";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
-import businessData from "./business-leaderboard.json"
+import { useEffect } from "react";
+import { useBusinessService } from "@/Service/Business-Service";
+import { useBusinessStore } from "@/store/Business-store";
 
 export default function Page() {
+  const { getAllBusiness } = useBusinessService();
+  const { getBusiness } = useBusinessStore();
+
+  useEffect(() => {
+    const fetchBusiness = async () => {
+      await getAllBusiness();
+    };
+
+    fetchBusiness();
+  }, [getAllBusiness]);
+
   return (
     <SidebarProvider
       style={
@@ -32,12 +42,12 @@ export default function Page() {
                 <ChartAreaInteractive />
               </div>
               <div className="px-4 lg:px-6">
-                <BusinessLeaderboardTable data={businessData} />
+                <BusinessLeaderboardTable data={getBusiness()} />
               </div>
             </div>
           </div>
         </div>
       </SidebarInset>
     </SidebarProvider>
-  )
+  );
 }
