@@ -4,6 +4,7 @@ import LoginPage from "./LoginPage.tsx"
 import CityGovernmentDashboard from "./app/dashboard/CityGovernmentDashboard.tsx"
 import BusinessDashboard from "./app/dashboard/BusinessDashboard.tsx"
 import TouristDashboard from "./app/dashboard/TouristDashboard.tsx"
+import SurveyForm from "./app/dashboard/SurveyForm.tsx"
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/city-government-dashboard" element={<CityGovernmentDashboard />} />
         <Route path="/business-dashboard" element={<BusinessDashboard />} />
         <Route path="/tourist-dashboard" element={<TouristDashboard />} />
+        <Route path="/survey" element={<SurveyForm />} />
       </Routes>
     </Router>
   )
